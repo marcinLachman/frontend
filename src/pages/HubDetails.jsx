@@ -27,7 +27,8 @@ const StyledRating = styled(Rating)({
   },
 });
 
-const IMG_URL = 'https://backendhub-production.up.railway.app/api/v1/hubs/static/images';
+// const IMG_URL = 'https://backendhub-production.up.railway.app/api/v1/hubs/static/images';
+const IMG_URL = 'http://10.43.8.241:5000/api/v1/hubs/static/images';
 
 const StyledNameHub = styled(Typography) ( ({ theme }) => ({
   fontSize: '3rem',
@@ -79,7 +80,6 @@ const HubDetails = () => {
             <ImageListItem>
               <img
                 src={hubDataById.image ? `${IMG_URL}/images-${hubDataById.image[0]['FileName']}` : ''}
-                // src={hubDataById.image ? `${IMG_URL}/images-${hubDataById.image[0]['FileName']}` : ''}
                 alt={hubDataById.image}
                 loading="lazy"
               />

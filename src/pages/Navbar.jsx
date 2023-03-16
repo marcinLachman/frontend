@@ -13,18 +13,32 @@ import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 
 import { styled } from '@mui/system';
-const MainNameAndLogo = styled(Typography) ( ({ theme }) => ({
+const StyledMainNameAndLogo = styled(Typography) ( ({ theme }) => ({
   fontSize: '2rem',
   fontWeight: 800,
   [theme.breakpoints.down('md')]:{
-    fontSize: '1.3rem',
+    fontSize: '1.5rem',
     textAlign: 'center',
     fontWeight: 800,
   }
 }));
-const AdminDisplayOff = styled(Button) ( ({ theme }) => ({
+const StyledAdminDisplayOff = styled(Button) ( ({ theme }) => ({
   [theme.breakpoints.down('md')]:{
     display: 'none',
+  }
+}));
+const StyledFlagsIcons = styled(Avatar) ( ({ theme }) => ({
+  width: '2rem',
+  height: '1.5rem',
+  [theme.breakpoints.down('md')]:{
+    width: '0.8rem',
+    height: '0.5rem',
+  }
+}));
+const StyledTextContact = styled(Button) ( ({ theme }) => ({
+  fontSize: '1rem',
+  [theme.breakpoints.down('md')]:{
+    fontSize: '0.5rem',
   }
 }));
 
@@ -32,7 +46,22 @@ const Navbar = () => {
   return (
   <nav>
     <Container>
-      <Grid container spacing={2}>
+      <Grid container direction="row-reverse" spacing={1}>
+
+        <Grid item sm={6} xs={12}>
+            <Button variant="text">
+              <StyledFlagsIcons variant={"square"} alt="The icon pl" src={polandIcon} />
+            </Button>
+            <Button variant="text">
+              <StyledFlagsIcons variant={"square"} alt="The icon uk" src={spainIcon} />
+            </Button>
+            <Button variant="text">
+              <StyledFlagsIcons variant={"square"} alt="The icon uk" src={ukIcon} />
+            </Button>
+            <StyledTextContact variant="body2" component="div">Contact</StyledTextContact>
+            <StyledAdminDisplayOff variant="body2" component="div">admin</StyledAdminDisplayOff>
+        </Grid>
+
         <Grid item sm={6} xs={12}>
           <Link to='/'>
             <Box sx={{
@@ -40,37 +69,14 @@ const Navbar = () => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <MainNameAndLogo variant="h4" component="h2"  m={2} gutterBottom>
+            <StyledMainNameAndLogo variant="h4" component="h2"  m={2} gutterBottom>
               <BsFillSignRailroadFill />
-            </MainNameAndLogo>
-            <MainNameAndLogo m={2} gutterBottom>
+            </StyledMainNameAndLogo>
+            <StyledMainNameAndLogo m={2} gutterBottom>
               Adventure Hubs
-            </MainNameAndLogo>
+            </StyledMainNameAndLogo>
             </Box>
           </Link>
-        </Grid>
-
-        <Grid item sm={6} xs={12}>
-          <Button variant="text">
-            <Avatar variant={"square"} alt="The icon pl" src={polandIcon} style={{
-              width: '2rem',
-              height: '1.5rem',
-            }} />
-          </Button>
-          <Button variant="text">
-            <Avatar variant={"square"} alt="The icon uk" src={spainIcon} style={{
-              width: '2rem',
-              height: '1.5rem',
-            }} />
-          </Button>
-          <Button variant="text">
-            <Avatar variant={"square"} alt="The icon uk" src={ukIcon} style={{
-              width: '2rem',
-              height: '1.5rem',
-            }} />
-          </Button>
-          <Button variant="body2" component="div">Contact</Button>
-          <AdminDisplayOff variant="body2" component="div">admin</AdminDisplayOff>
         </Grid>
         </Grid>
     </Container>

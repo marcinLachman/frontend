@@ -7,7 +7,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-const IMG_URL = 'https://backendhub-production.up.railway.app/api/v1/hubs/static/images';
+// const IMG_URL = 'https://backendhub-production.up.railway.app/api/v1/hubs/static/images';
+const IMG_URL = 'http://10.43.8.241:5000/api/v1/hubs/static/images';
 
 const DisplayHubDetails = ({ hubs }) => {
   return (
@@ -19,8 +20,8 @@ const DisplayHubDetails = ({ hubs }) => {
             <CardMedia
               component="img"
               height="140"
-              // image={`${IMG_URL}/images-${Object.values(hubs.image[0])}`}
-              image={`${IMG_URL}/images-${hubs.image[0]['FileName']}`}
+              image={`${IMG_URL}/images-${Object.values(hubs.image[0])}`}
+              // image={`${IMG_URL}/${hubs.image[0]['FileName']}`}
               alt="green iguana"
             />
             <CardContent>
