@@ -7,7 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 
-const IMG_URL = 'http://backendhub-production.up.railway.app/api/v1/hubs/static/images';
+const IMG_URL = 'https://backendhub-production.up.railway.app/api/v1/hubs/static/images';
 
 const DisplayHubDetails = ({ hubs }) => {
   return (
