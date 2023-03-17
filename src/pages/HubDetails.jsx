@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,9 +15,13 @@ import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
 import TextField from '@mui/material/TextField';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import { styled } from '@mui/material/styles';
 const StyledRating = styled(Rating)({
@@ -27,8 +31,8 @@ const StyledRating = styled(Rating)({
   },
 });
 
-const IMG_URL = 'https://backendhub-production.up.railway.app/api/v1/hubs/static/images';
-// const IMG_URL = 'http://10.43.8.241:5000/api/v1/hubs/static/images';
+// const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
+const IMG_URL = 'http://localhost:5000/static/images';
 
 const StyledNameHub = styled(Typography) ( ({ theme }) => ({
   fontSize: '3rem',
@@ -58,7 +62,12 @@ const StyledPriceHub = styled(Typography) ( ({ theme }) => ({
 }));
 
 const HubDetails = () => {
-  // const [value, setValue] = useState(null)
+  const [date, setDate] = useState(null)
+  const [input, setInput] = useState({
+    houers: '',
+    adults: '',
+    kids: ''
+  });
   const { hubDataById, isLoading, error } = useSelector((state) => state.hubs);
   const dispatch = useDispatch();
   const id = useParams();
@@ -67,6 +76,13 @@ const HubDetails = () => {
     dispatch(getHubDataById(id['id']));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleChange = (event) => {
+    setInput({
+      ...input,
+      [event.target.name]: event.target.value
+    })
+  }
 
   return (
     <>
@@ -79,28 +95,28 @@ const HubDetails = () => {
           <ImageList sx={{ width: '90%', height: '90%', mx: 'auto' }} cols={2} gap={8} rowHeight='auto'>
             <ImageListItem>
               <img
-                src={hubDataById.image ? `${IMG_URL}/images-${hubDataById.image[0]['FileName']}` : ''}
+                src={hubDataById.image ? `${IMG_URL}/images-${Object.values(hubDataById.image[0])}` : ''}
                 alt={hubDataById.image}
                 loading="lazy"
               />
             </ImageListItem>
             <ImageListItem>
               <img
-                src={hubDataById.image ? `${IMG_URL}/images-${hubDataById.image[1]['FileName']}` : ''}
+                src={hubDataById.image ? `${IMG_URL}/images-${Object.values(hubDataById.image[1])}` : ''}
                 alt={hubDataById.image}
                 loading="lazy"
               />
             </ImageListItem>
             <ImageListItem>
               <img
-                src={hubDataById.image ? `${IMG_URL}/images-${hubDataById.image[2]['FileName']}` : ''}
+                src={hubDataById.image ? `${IMG_URL}/images-${Object.values(hubDataById.image[2])}` : ''}
                 alt={hubDataById.image}
                 loading="lazy"
               />
             </ImageListItem>
             <ImageListItem>
               <img
-                src={hubDataById.image ? `${IMG_URL}/images-${hubDataById.image[3]['FileName']}` : ''}
+                src={hubDataById.image ? `${IMG_URL}/images-${Object.values(hubDataById.image[3])}` : ''}
                 alt={hubDataById.image}
                 loading="lazy"
               />
@@ -145,11 +161,14 @@ const HubDetails = () => {
 
       <section>
         <Box>
+          <Typography variant="h3" m={2} p={3} sx={{ fontWeight: 600 }}>
+            Zarezerwój teraz: 
+          </Typography>
           <Box sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
-            marginTop: '2rem'
+            gap: 3,
+            marginTop: '2rem',
           }}>
             <TextField 
               color='textFieldText'
@@ -158,6 +177,9 @@ const HubDetails = () => {
               variant="outlined" 
               fullWidth 
               sx={{
+                "& input": {
+                  color: '#fff'
+                },
                 '& .MuiOutlinedInput-root': {  // - The Input-root, inside the TextField-root
                   '& fieldset': {            // - The <fieldset> inside the Input-root
                       borderColor: '#fff',   // - Set the Input border
@@ -168,7 +190,7 @@ const HubDetails = () => {
                   '&.Mui-focused fieldset': { // - Set the Input border when parent is focused 
                       borderColor: '#fff',
                   },
-              },
+                },
               }} 
             />
             <TextField 
@@ -178,6 +200,9 @@ const HubDetails = () => {
               variant="outlined" 
               fullWidth 
               sx={{
+                "& input": {
+                  color: '#fff'
+                },
                 '& .MuiOutlinedInput-root': {  // - The Input-root, inside the TextField-root
                   '& fieldset': {            // - The <fieldset> inside the Input-root
                       borderColor: '#fff',   // - Set the Input border
@@ -193,17 +218,18 @@ const HubDetails = () => {
             />
           </Box>
           <Box>
-            <Grid container spacing={2} p={4}>
+            <Grid container spacing={2} mt={2}>
             <Grid item sm={3} xs={12}>
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label='Select Date'
                   disablePast
-                  value={value}
-                  onChange={(newValue) => setValue(newValue)}
+                  value={date}
+                  onChange={(newValue) => setDate(newValue)}
                   sx={{
                     svg: { color: '#fff' },
                     input: { color: '#fff' },
+                    label: { color: '#fff' },
                     '& .MuiOutlinedInput-root': {
                       '& fieldset': {
                         borderColor: '#fff',
@@ -217,16 +243,109 @@ const HubDetails = () => {
                     },
                   }}
                 />
-              </LocalizationProvider> */}
+              </LocalizationProvider>
             </Grid>
 
             <Grid item sm={3} xs={12}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Godziny</InputLabel>
+                <Select
+                  color="textFieldText"
+                  labelId="houers"
+                  id="houers"
+                  value={input.houers}
+                  label="Godziny"
+                  name="houers"
+                  onChange={handleChange}
+                  sx={{
+                    color: "#fff",
+                    '.MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#fff',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#fff',
+                    },
+                    '.MuiSvgIcon-root ': {
+                      fill: "white !important",
+                    }, 
+                  }}
+                >
+                {hubDataById.bookingHouers?.map((index) => {
+                return (
+                  <MenuItem key={index} value={index} sx={{ color: '#000'}}>
+                    {index}
+                  </MenuItem>
+                )})}
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item sm={3} xs={12}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Ilość Dorosłych</InputLabel>
+                <Select
+                  color="textFieldText"
+                  labelId="adults"
+                  id="adults"
+                  value={input.adults}
+                  label="Ilość Dorosłych"
+                  name="adults"
+                  onChange={handleChange}
+                  sx={{
+                    color: "#fff",
+                    '.MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#fff',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#fff',
+                    },
+                    '.MuiSvgIcon-root ': {
+                      fill: "white !important",
+                    },
+                  }}
+                >
+                {hubDataById.bookingAdults?.map((index) => {
+                return (
+                  <MenuItem key={index} value={index} sx={{ color: '#000'}}>
+                    {index}
+                  </MenuItem>
+                )})}
+                </Select>
+              </FormControl>
             </Grid>
 
             <Grid item sm={3} xs={12}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Ilość dzieci</InputLabel>
+                <Select
+                  color="textFieldText"
+                  labelId="kids"
+                  id="kids"
+                  value={input.kids}
+                  label="Ilość dzieci"
+                  name="kids"
+                  onChange={handleChange}
+                  sx={{
+                    color: "#fff",
+                    '.MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#fff',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#fff',
+                    },
+                    '.MuiSvgIcon-root ': {
+                      fill: "white !important",
+                    },
+                  }}
+                >
+                {hubDataById.bookingChilds?.map((index) => {
+                return (
+                  <MenuItem key={index} value={index} sx={{ color: '#000'}}>
+                    {index}
+                  </MenuItem>
+                )})}
+                </Select>
+              </FormControl>
             </Grid>
             </Grid>
           </Box>

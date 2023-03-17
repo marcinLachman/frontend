@@ -63,11 +63,11 @@ const Home = () => {
               justifyContent: 'space-evenly'
             }}>
             <StyledMainText component="div">
-              &#8222;Taking you safely to the best places...&#8223;
+              &#8222;Taking you to the best places...&#8223;
               </StyledMainText>
             <StyledMainContentText component="div">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo officia harum provident quos aliquid mollitia perspiciatis quibusdam, magni alias quia odio sapiente eveniet! Tempora assumenda sunt at placeat explicabo voluptate?
-              </StyledMainContentText>
+              The Adventure Hub is the perfect choice for anyone looking for a thrilling and unforgettable adventure experience, with a strong emphasis on  personalized service.
+            </StyledMainContentText>
           </Grid>
         </Grid>
       </section>
