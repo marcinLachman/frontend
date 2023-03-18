@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const URL = 'https://backendhub-production.up.railway.app/api/v1/hubs';
-// const URL = 'http://10.43.8.241:5000/api/v1/hubs';
+// const URL = 'https://backendhub-production.up.railway.app/api/v1/hubs';
+const URL = 'http://10.43.8.241:5000/api/v1/hubs';
 
 export const getAllHubs = createAsyncThunk('hubs/getAllHubs', async (thunkAPI) => {
   try {
-    const response = await axios.get(URL , {
+    const response = await axios.get(URL, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -38,35 +38,35 @@ const hubsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-    .addCase(getAllHubs.pending, (state) => {
-      state.isLoading = true;
-      state.error =  false
-    })
-    .addCase(getAllHubs.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.hubsData = action.payload;
-      state.error =  false
-    })
-    .addCase(getAllHubs.rejected, (state, action) => {
-      state.isLoading = false;
-      state.hubsData = [];
-      state.error = true;
-    })
+      .addCase(getAllHubs.pending, (state) => {
+        state.isLoading = true;
+        state.error = false
+      })
+      .addCase(getAllHubs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.hubsData = action.payload;
+        state.error = false
+      })
+      .addCase(getAllHubs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hubsData = [];
+        state.error = true;
+      })
 
-    .addCase(getHubDataById.pending, (state) => {
-      state.isLoading = true;
-      state.error =  false
-    })
-    .addCase(getHubDataById.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.hubDataById = action.payload;
-      state.error =  false
-    })
-    .addCase(getHubDataById.rejected, (state, action) => {
-      state.isLoading = false;
-      state.hubDataById = [];
-      state.error = true;
-    })
+      .addCase(getHubDataById.pending, (state) => {
+        state.isLoading = true;
+        state.error = false
+      })
+      .addCase(getHubDataById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.hubDataById = action.payload;
+        state.error = false
+      })
+      .addCase(getHubDataById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.hubDataById = [];
+        state.error = true;
+      })
   }
 });
 

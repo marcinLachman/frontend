@@ -1,27 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getHubDataById } from '../store/features/hubsSlice';
 
+import BookHub from "components/BookHub";
+
 import Container from '@mui/material/Container';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
-import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
 
 import { styled } from '@mui/material/styles';
 const StyledRating = styled(Rating)({
@@ -31,8 +25,8 @@ const StyledRating = styled(Rating)({
   },
 });
 
-const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
-// const IMG_URL = 'http://localhost:5000/static/images';
+// const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
+const IMG_URL = 'http://localhost:5000/static/images';
 
 const StyledNameHub = styled(Typography) ( ({ theme }) => ({
   fontSize: '3rem',
@@ -62,12 +56,6 @@ const StyledPriceHub = styled(Typography) ( ({ theme }) => ({
 }));
 
 const HubDetails = () => {
-  const [date, setDate] = useState(null)
-  const [input, setInput] = useState({
-    houers: '',
-    adults: '',
-    kids: ''
-  });
   const { hubDataById, isLoading, error } = useSelector((state) => state.hubs);
   const dispatch = useDispatch();
   const id = useParams();
@@ -77,12 +65,6 @@ const HubDetails = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleChange = (event) => {
-    setInput({
-      ...input,
-      [event.target.name]: event.target.value
-    })
-  }
 
   return (
     <>
@@ -160,196 +142,7 @@ const HubDetails = () => {
       </section>
 
       <section>
-        <Box>
-          <Typography variant="h3" m={2} p={3} sx={{ fontWeight: 600 }}>
-            Zarezerwój teraz: 
-          </Typography>
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 3,
-            marginTop: '2rem',
-          }}>
-            <TextField 
-              color='textFieldText'
-              id="name" 
-              label="Name and Surname please"   
-              variant="outlined" 
-              fullWidth 
-              sx={{
-                "& input": {
-                  color: '#fff'
-                },
-                '& .MuiOutlinedInput-root': {  // - The Input-root, inside the TextField-root
-                  '& fieldset': {            // - The <fieldset> inside the Input-root
-                      borderColor: '#fff',   // - Set the Input border
-                  },
-                  '&:hover fieldset': {
-                      borderColor: '#fff', // - Set the Input border when parent has :hover
-                  },
-                  '&.Mui-focused fieldset': { // - Set the Input border when parent is focused 
-                      borderColor: '#fff',
-                  },
-                },
-              }} 
-            />
-            <TextField 
-              color='textFieldText'
-              id="email" 
-              label="Email please"   
-              variant="outlined" 
-              fullWidth 
-              sx={{
-                "& input": {
-                  color: '#fff'
-                },
-                '& .MuiOutlinedInput-root': {  // - The Input-root, inside the TextField-root
-                  '& fieldset': {            // - The <fieldset> inside the Input-root
-                      borderColor: '#fff',   // - Set the Input border
-                  },
-                  '&:hover fieldset': {
-                      borderColor: '#fff', // - Set the Input border when parent has :hover
-                  },
-                  '&.Mui-focused fieldset': { // - Set the Input border when parent is focused 
-                      borderColor: '#fff',
-                  },
-              },
-              }} 
-            />
-          </Box>
-          <Box>
-            <Grid container spacing={2} mt={2}>
-            <Grid item sm={3} xs={12}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label='Select Date'
-                  disablePast
-                  value={date}
-                  onChange={(newValue) => setDate(newValue)}
-                  sx={{
-                    svg: { color: '#fff' },
-                    input: { color: '#fff' },
-                    label: { color: '#fff' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#fff',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#fff',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#fff',
-                      },
-                    },
-                  }}
-                />
-              </LocalizationProvider>
-            </Grid>
-
-            <Grid item sm={3} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Godziny</InputLabel>
-                <Select
-                  color="textFieldText"
-                  labelId="houers"
-                  id="houers"
-                  value={input.houers}
-                  label="Godziny"
-                  name="houers"
-                  onChange={handleChange}
-                  sx={{
-                    color: "#fff",
-                    '.MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#fff',
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#fff',
-                    },
-                    '.MuiSvgIcon-root ': {
-                      fill: "white !important",
-                    }, 
-                  }}
-                >
-                {hubDataById.bookingHouers?.map((index) => {
-                return (
-                  <MenuItem key={index} value={index} sx={{ color: '#000'}}>
-                    {index}
-                  </MenuItem>
-                )})}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item sm={3} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Ilość Dorosłych</InputLabel>
-                <Select
-                  color="textFieldText"
-                  labelId="adults"
-                  id="adults"
-                  value={input.adults}
-                  label="Ilość Dorosłych"
-                  name="adults"
-                  onChange={handleChange}
-                  sx={{
-                    color: "#fff",
-                    '.MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#fff',
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#fff',
-                    },
-                    '.MuiSvgIcon-root ': {
-                      fill: "white !important",
-                    },
-                  }}
-                >
-                {hubDataById.bookingAdults?.map((index) => {
-                return (
-                  <MenuItem key={index} value={index} sx={{ color: '#000'}}>
-                    {index}
-                  </MenuItem>
-                )})}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item sm={3} xs={12}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Ilość dzieci</InputLabel>
-                <Select
-                  color="textFieldText"
-                  labelId="kids"
-                  id="kids"
-                  value={input.kids}
-                  label="Ilość dzieci"
-                  name="kids"
-                  onChange={handleChange}
-                  sx={{
-                    color: "#fff",
-                    '.MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#fff',
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#fff',
-                    },
-                    '.MuiSvgIcon-root ': {
-                      fill: "white !important",
-                    },
-                  }}
-                >
-                {hubDataById.bookingChilds?.map((index) => {
-                return (
-                  <MenuItem key={index} value={index} sx={{ color: '#000'}}>
-                    {index}
-                  </MenuItem>
-                )})}
-                </Select>
-              </FormControl>
-            </Grid>
-            </Grid>
-          </Box>
-        </Box>
+          <BookHub hubDataById={hubDataById} />
       </section>
 
       </Container>
