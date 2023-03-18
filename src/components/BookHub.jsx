@@ -15,8 +15,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import InputIcon from "react-multi-date-picker/components/input_icon"
-
 import { styled } from '@mui/material/styles';
 const StyledInputNameSurnameFields = styled(Box) ( ({ theme }) => ({
   display: 'flex',

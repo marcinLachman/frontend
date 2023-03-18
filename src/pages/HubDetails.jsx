@@ -25,8 +25,8 @@ const StyledRating = styled(Rating)({
   },
 });
 
-// const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
-const IMG_URL = 'http://localhost:5000/static/images';
+const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
+// const IMG_URL = 'http://localhost:5000/static/images';
 
 const StyledNameHub = styled(Typography) ( ({ theme }) => ({
   fontSize: '3rem',
