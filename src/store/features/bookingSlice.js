@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const URL = 'http://10.43.8.241:5000/api/v1/booking/';
+// const URL = 'http://10.43.8.241:5000/api/v1/booking/';
+const URL = 'https://backendhub-production.up.railway.app/api/v1/booking/';
 
 export const getAllBooking = createAsyncThunk('booking/getAllBooks', async (thunkAPI) => {
   try {
