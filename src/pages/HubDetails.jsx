@@ -15,8 +15,6 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 
-
-
 import { styled } from '@mui/material/styles';
 const StyledRating = styled(Rating)({
   '& .MuiRating-icon': {
@@ -25,8 +23,8 @@ const StyledRating = styled(Rating)({
   },
 });
 
-const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
-// const IMG_URL = 'http://localhost:5000/static/images';
+// const IMG_URL = 'https://backendhub-production.up.railway.app/static/images';
+const IMG_URL = 'http://localhost:5000/static/images';
 
 const StyledNameHub = styled(Typography) ( ({ theme }) => ({
   fontSize: '3rem',

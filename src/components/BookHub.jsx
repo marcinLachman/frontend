@@ -1,19 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getAllBooking } from '../store/features/bookingSlice';
 
 import DatePicker from "react-multi-date-picker";
 import "react-multi-date-picker/styles/backgrounds/bg-dark.css"
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
+import Modal from '@mui/material/Modal';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+
+import ticket from '../assets/ticket.svg';
 
 import { styled } from '@mui/material/styles';
 const StyledInputNameSurnameFields = styled(Box) ( ({ theme }) => ({
@@ -26,16 +37,48 @@ const StyledInputNameSurnameFields = styled(Box) ( ({ theme }) => ({
   }
 }));
 
+const styleModal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: '#111827',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const BookHub = ({ hubDataById }) => {
   const [date, setDate] = useState(new Date());
   const [input, setInput] = useState({
     name: '',
-    surnname: '',
+    surname: '',
     email: '',
     houers: '',
     adults: '',
-    kids: ''
+    kids: '',
+    extraInfo: ''
   });
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const { id } = useParams();
+  const { booksData, isLoading, error } = useSelector((state) => state.booking);
+  const dispatch = useDispatch();
+  const data = booksData.filter((booking) => booking.idActivities === id);
+ 
+  const selectedDate = date.toLocaleString('pl', {
+    day: 'numeric', // numeric, 2-digit
+    year: 'numeric', // numeric, 2-digit
+    month: 'long', // numeric, 2-digit, long, short, narrow
+  });
+
+  useEffect(() => {
+    dispatch(getAllBooking());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (event) => {
     setInput({
@@ -45,7 +88,9 @@ const BookHub = ({ hubDataById }) => {
   };
 
   return (
-    <div>
+    <>
+      {isLoading && <Typography variant="h5" component="div" mt={2} paragraph>Loading data ...</Typography>}
+      {error && <Typography variant="h5" component="div" mt={2} paragraph>Error ...</Typography> }
         <Box>
           <Typography variant="h3" m={2} p={3} sx={{ fontWeight: 600 }}>
             Zarezerwój teraz: 
@@ -279,11 +324,99 @@ const BookHub = ({ hubDataById }) => {
                 )})}
                 </Select>
               </FormControl>
+              </Grid>
             </Grid>
-            </Grid>
+            <TextField
+                color='textFieldText'
+                id="extraInfo"
+                label="Extra informację"
+                multiline
+                rows={4}
+                fullWidth 
+                inputProps={{ style: { color: "#fff" } }}
+                name="extraInfo"
+                onChange={handleChange}
+                sx={{
+                  marginTop: '2rem',
+                  "& input": {
+                    color: '#fff'
+                  },
+                  '& .MuiOutlinedInput-root': {  // - The Input-root, inside the TextField-root
+                    '& fieldset': {            // - The <fieldset> inside the Input-root
+                        borderColor: '#fff',   // - Set the Input border
+                    },
+                    '&:hover fieldset': {
+                        borderColor: '#fff', // - Set the Input border when parent has :hover
+                    },
+                    '&.Mui-focused fieldset': { // - Set the Input border when parent is focused 
+                        borderColor: '#fff',
+                    },
+                },
+                }}
+              />
           </Box>
+          <Button variant="contained" onClick={handleOpen} sx={{ marginTop: '1rem' }} fullWidth>Rezerwuj</Button>
         </Box>
-    </div>
+
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styleModal}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div" paragraph>
+              {hubDataById.name}
+            </Typography>
+            <CardMedia
+              component="img"
+              width='128px'
+              height='128px'
+              image={ticket}
+              alt='ticket photo'
+              sx={{ marginBottom: '2rem'}}
+            />
+              <Typography variant="h6" paragraph>
+                Imię i nazwisko: {input.name} {input.surname}
+              </Typography>
+              <Typography variant="h6" paragraph>
+                Kiedy: {selectedDate}
+              </Typography>
+
+              <Typography variant="h6" paragraph>
+                Cena:  {hubDataById.price} &#8364;
+              </Typography>
+
+              <Typography variant="h6" paragraph>
+                Godzina: {input.houers}
+              </Typography>
+
+              <Typography variant="h6" paragraph>
+                Ilość osób dorosłych: {input.adults} 
+              </Typography>
+
+              <Typography variant="h6" paragraph>
+                Dzieci: {input.kids}
+              </Typography>
+
+              <Typography variant="h6" paragraph>
+                Ddoatkowe Info: {input.extraInfo}
+              </Typography>
+
+        </CardContent>
+          <CardActions sx={{
+            display: 'flex',
+            gap: '2rem',
+            justifyContent: 'end'
+          }}>
+          <Button variant="contained" onClick={handleClose} size="large">Cancel</Button>
+          <Button variant="contained" size="large">Pay</Button>
+        </CardActions>
+        </Box>
+      </Modal>
+    </>
   )
 }
 
