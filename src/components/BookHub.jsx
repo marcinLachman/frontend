@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllBooking } from '../store/features/bookingSlice';
@@ -64,10 +64,10 @@ const BookHub = ({ hubDataById }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { id } = useParams();
-  const { booksData, isLoading, error } = useSelector((state) => state.booking);
+  // const { id } = useParams();
+  const { isLoading, error } = useSelector((state) => state.booking);
   const dispatch = useDispatch();
-  const data = booksData.filter((booking) => booking.idActivities === id);
+  // const data = booksData.filter((booking) => booking.idActivities === id);
  
   const selectedDate = date.toLocaleString('pl', {
     day: 'numeric', // numeric, 2-digit
