@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAllBooking } from '../store/features/bookingSlice';
+import { getAllBooking, postBookingData } from '../store/features/bookingSlice';
 
 import DatePicker from "react-multi-date-picker";
 import "react-multi-date-picker/styles/backgrounds/bg-dark.css"
@@ -50,6 +50,8 @@ const styleModal = {
 };
 
 const BookHub = ({ hubDataById }) => {
+  const [dislplay, setDisplay] = useState(true);
+  const [noHubs, setNoHubs] = useState(false);
   const [date, setDate] = useState(new Date());
   const [input, setInput] = useState({
     name: '',
@@ -57,17 +59,18 @@ const BookHub = ({ hubDataById }) => {
     email: '',
     houers: '',
     adults: '',
-    kids: '',
+    childs: '',
     extraInfo: ''
   });
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // const { id } = useParams();
-  const { isLoading, error } = useSelector((state) => state.booking);
+  const { id } = useParams();
+  const { booksData, isLoading, error } = useSelector((state) => state.booking);
   const dispatch = useDispatch();
-  // const data = booksData.filter((booking) => booking.idActivities === id);
+
+  const data = booksData.filter((booking) => booking.idActivities === id);
  
   const selectedDate = date.toLocaleString('pl', {
     day: 'numeric', // numeric, 2-digit
@@ -87,10 +90,43 @@ const BookHub = ({ hubDataById }) => {
     })
   };
 
+  const handlePay = () => {
+
+    const addBooking = {
+      name: input.name,
+      surname: input.surname,
+      email: input.email,
+      selectedDate: selectedDate,
+      houer: input.houers,
+      adults: input.adults,
+      childs: input.childs,
+      extraInfo: input.extraInfo,
+      idActivities: id,
+    };
+
+    const tripsSameDate = data.filter(x => x.selectedDate === selectedDate);
+    const lengthArray = tripsSameDate.length;
+    if (hubDataById.quantityHub - lengthArray <= 0) {
+      setNoHubs(true);
+    } else {
+      dispatch(postBookingData(addBooking));
+      handleClose();
+      setDisplay(false);
+    };
+  };
+
   return (
     <>
       {isLoading && <Typography variant="h5" component="div" mt={2} paragraph>Loading data ...</Typography>}
       {error && <Typography variant="h5" component="div" mt={2} paragraph>Error ...</Typography> }
+      {!dislplay ? (
+        <Box>
+          <Typography variant="h3" m={2} p={3} sx={{ fontWeight: 600 }} color='success.main'>
+            Wycieczka zabookowana
+          </Typography>
+        </Box>
+      ) :
+      ( 
         <Box>
           <Typography variant="h3" m={2} p={3} sx={{ fontWeight: 600 }}>
             Zarezerwój teraz: 
@@ -161,6 +197,9 @@ const BookHub = ({ hubDataById }) => {
               label="Email please"   
               variant="outlined" 
               fullWidth 
+              value={input.email}
+              name="email"
+              onChange={handleChange}
               sx={{
                 "& input": {
                   color: '#fff'
@@ -183,28 +222,6 @@ const BookHub = ({ hubDataById }) => {
             <Grid container spacing={2} mt={2}>
             <Grid item sm={3} xs={12}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                {/* <DatePicker
-                  label='Select Date'
-                  disablePast
-                  value={date}
-                  onChange={(newValue) => setDate(newValue)}
-                  sx={{
-                    svg: { color: '#fff' },
-                    input: { color: '#fff' },
-                    label: { color: '#fff' },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#fff',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#fff',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#fff',
-                      },
-                    },
-                  }}
-                /> */}
                 <DatePicker 
                   minDate={new Date()}
                   className="bg-dark"
@@ -299,9 +316,9 @@ const BookHub = ({ hubDataById }) => {
                   color="textFieldText"
                   labelId="kids"
                   id="kids"
-                  value={input.kids}
+                  value={input.childs}
                   label="Ilość dzieci"
-                  name="kids"
+                  name="childs"
                   onChange={handleChange}
                   sx={{
                     color: "#fff",
@@ -357,6 +374,8 @@ const BookHub = ({ hubDataById }) => {
           </Box>
           <Button variant="contained" onClick={handleOpen} sx={{ marginTop: '1rem' }} fullWidth>Rezerwuj</Button>
         </Box>
+        )
+      }
 
 
       <Modal
@@ -366,8 +385,8 @@ const BookHub = ({ hubDataById }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={styleModal}>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div" paragraph>
+          <CardContent sx={{ backgroundColor: '#1B2028' }}>
+            <Typography gutterBottom variant="h5" component="div" paragraph sx={{ marginLeft: '1rem' }}>
               {hubDataById.name}
             </Typography>
             <CardMedia
@@ -378,30 +397,30 @@ const BookHub = ({ hubDataById }) => {
               alt='ticket photo'
               sx={{ marginBottom: '2rem'}}
             />
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Imię i nazwisko: {input.name} {input.surname}
               </Typography>
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Kiedy: {selectedDate}
               </Typography>
 
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Cena:  {hubDataById.price} &#8364;
               </Typography>
 
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Godzina: {input.houers}
               </Typography>
 
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Ilość osób dorosłych: {input.adults} 
               </Typography>
 
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Dzieci: {input.kids}
               </Typography>
 
-              <Typography variant="h6" paragraph>
+              <Typography variant="h6" paragraph sx={{ marginLeft: '1rem' }}>
                 Ddoatkowe Info: {input.extraInfo}
               </Typography>
 
@@ -409,11 +428,19 @@ const BookHub = ({ hubDataById }) => {
           <CardActions sx={{
             display: 'flex',
             gap: '2rem',
-            justifyContent: 'end'
+            justifyContent: 'end',
+            margin: '2rem'
           }}>
           <Button variant="contained" onClick={handleClose} size="large">Cancel</Button>
-          <Button variant="contained" size="large">Pay</Button>
+          <Button onClick={handlePay} variant="contained" size="large">Pay</Button>
         </CardActions>
+        {noHubs && 
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 600, textAlign: 'center' }} color='error.main'>
+              Wyciceczki wyprzaedane
+            </Typography>
+          </Box>
+        }
         </Box>
       </Modal>
     </>

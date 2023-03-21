@@ -17,6 +17,15 @@ export const getAllBooking = createAsyncThunk('booking/getAllBooks', async (thun
   }
 });
 
+export const postBookingData = createAsyncThunk('booking/postBookingData', async (dataBook, thunkAPI) => {
+  try {
+    const response = await axios.post(URL, dataBook)
+    return response.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue('something went wrong');
+  }
+});
+
 const initialState = {
   booksData: [],
   isLoading: true,
@@ -42,6 +51,9 @@ const booksSlice = createSlice({
         state.isLoading = false;
         state.booksData = [];
         state.error = true;
+      })
+      .addCase(postBookingData.fulfilled, (state, action) => {
+        state.booksData = state.booksData.concat(action.payload)
       })
   }
 });
