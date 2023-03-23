@@ -48,7 +48,7 @@ const Home = () => {
     dispatch(getAllHubs());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   return (
     <main>
       <section id="main-image">
